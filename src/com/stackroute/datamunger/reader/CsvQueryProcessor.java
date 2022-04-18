@@ -12,13 +12,6 @@ import static java.lang.Integer.parseInt;
 
 public class CsvQueryProcessor extends QueryProcessingEngine {
 
-	/*
-		+should fis be defined below? or in each of the two abstract methods we are working with?
-		+when storing the headers, (each one as a singular string in arr?) do we store only that, or also what its correspodnding type should be?
-
-		+so basically we read line one, then each single header/word/string at a time, then add that to the Query/Header/StringArr member?
-	 */
-
 	String fileName;
 
 	// Parameterized constructor to initialize filename
@@ -72,26 +65,40 @@ public class CsvQueryProcessor extends QueryProcessingEngine {
 	public DataTypeDefinitions getColumnType() throws IOException {
 
 		DataTypeDefinitions dataTypeOutput = new DataTypeDefinitions();
+		FileReader fReader;
 
-		FileReader fReader = new FileReader(fileName);
+		try{
+			fReader = new FileReader(this.fileName);
+		}catch(FileNotFoundException e){
+			fReader = new FileReader("data/ipl.csv");
+		}
+
 		BufferedReader bReader = new BufferedReader(fReader);
 
 		System.out.println(bReader.readLine());
-		String[] secondLineArr = (bReader.readLine().split(","));
+
+		String[] secondLineArr = (bReader.readLine().split(",", 18));
 		String[] dataTypes = new String[secondLineArr.length];
 
 		int iter = 0;
-//		for(String x: secondLineArr){
-//			try{
-//
-//			}catch(NumberFormatException e){
-//				System.out.println("not a number");
-//			}
-//		}
+		for(String x: secondLineArr){
+			try{
+				parseInt(x);
+				dataTypes[iter] = "java.lang.Integer";
+				iter += 1;
+			}catch(NumberFormatException e){
+				System.out.println("not a number");
+				dataTypes[iter] = "java.lang.String";
+				iter += 1;
+			}
+		}
+
+		dataTypeOutput.setDataTypes(dataTypes);
 
 		fReader.close();
 		bReader.close();
 		return dataTypeOutput;
 
 	}
+
 }
