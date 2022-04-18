@@ -7,7 +7,13 @@ public class DataTypeDefinitions {
 	 * the data type for all columns for all data types
 	 */
 
+	private String[] dataTypes;
+
+	public void setDataTypes(String[] dataTypes) {
+		this.dataTypes = dataTypes;
+	}
+
 	public String[] getDataTypes() {
-		return null;
+		return dataTypes;
 	}
 }
